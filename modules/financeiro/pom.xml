@@ -1,0 +1,137 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>br.com.guaranamineiro.sankhya</groupId>
+		<artifactId>gm-sankhya</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>financeiro</artifactId>
+	<packaging>jar</packaging>
+
+	<properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>br.com.guaranamineiro.sankhya</groupId>
+			<artifactId>model</artifactId>
+			<version>${model.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	
+	
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.4</version>
+				<configuration>
+					<minimizeJar>false</minimizeJar>
+					<artifactSet>
+						<excludes>
+							<exclude>br.com.sankhya:*</exclude>
+							<exclude>com.sankhya:*</exclude>
+						</excludes>
+					</artifactSet>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>						
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
+				<executions>
+					<execution>
+						<id>action</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<outputFile>target/${project.artifactId}-${project.version}-action.jar</outputFile>
+							<filters>
+								<filter>
+									<excludes>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/event/**</exclude>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/scheduler/**</exclude>
+										
+										<exclude>.ignore</exclude>
+										<exclude>report/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+					<execution>
+						<id>event</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<outputFile>target/${project.artifactId}-${project.version}-event.jar</outputFile>
+							<filters>
+								<filter>
+									<excludes>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/action/**</exclude>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/scheduler/**</exclude>
+										
+										<exclude>.ignore</exclude>
+										<exclude>report/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+					<execution>
+						<id>scheduler-registro-boleto</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<outputFile>target/${project.artifactId}-${project.version}-scheduler-registro-boleto.jar</outputFile>
+							<filters>
+								<filter>
+									<excludes>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/action/**</exclude>
+										<exclude>br/com/guaranamineiro/sankhya/financeiro/event/**</exclude>
+										
+										<exclude>.ignore</exclude>
+										<exclude>report/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>					
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

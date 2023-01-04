@@ -1,0 +1,6 @@
+root = true
+
+# 3 space indentation
+[*.java]
+indent_style = space
+indent_size = 3
